@@ -1,4 +1,6 @@
 #include "PlayScene.h"
+#include "Engine/Camera.h"
+#include "Player.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject* parent)
@@ -9,6 +11,9 @@ PlayScene::PlayScene(GameObject* parent)
 //初期化
 void PlayScene::Initialize()
 {
+	Instantiate<Player>(this);
+	Camera::SetPosition(XMFLOAT3(1, 3, -8));
+	Camera::SetTarget(XMFLOAT3(0, 2, 0));
 }
 
 //更新
