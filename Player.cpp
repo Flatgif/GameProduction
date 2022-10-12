@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Engine/Camera.h"
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -19,6 +20,7 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
+    Camera::SetPosition(transform_.position_);
 }
 
 //描画

@@ -41,7 +41,7 @@ void SceneManager::Update()
 		{
 		case SCENE_ID_TEST: Instantiate<TestScene>(this); break;
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
-		case SCENE_ID_BATTLE: Instantiate<battleScene>(this); break;
+		case SCENE_ID_BATTLE: Instantiate<BattleScene>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;
