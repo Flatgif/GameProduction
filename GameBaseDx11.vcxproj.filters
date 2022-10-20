@@ -102,6 +102,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>PlayScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -172,6 +175,9 @@
       <Filter>PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
       <Filter>PlayScene</Filter>
     </ClInclude>
   </ItemGroup>

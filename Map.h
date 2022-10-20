@@ -2,15 +2,17 @@
 #include "Engine/GameObject.h"
 
 //◆◆◆を管理するクラス
-class Player : public GameObject
+class Map : public GameObject
 {
-    int hModel_;    //モデル番号
+    int hModel_[2];
+    int map_[15][15]; //二次元配列
+
 public:
     //コンストラクタ
-    Player(GameObject* parent);
+    Map(GameObject* parent);
 
     //デストラクタ
-    ~Player();
+    ~Map();
 
     //初期化
     void Initialize() override;
