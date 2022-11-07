@@ -5,11 +5,12 @@
 class Map : public GameObject
 {
     int hModel_[2];
+    int width;
     struct
     {
+        int data;
         int type;
-        int height;
-    }map_[15][15];
+    }map_[31][31];
 public:
     Map();
     //コンストラクタ
@@ -31,4 +32,5 @@ public:
     void Release() override;
 
     void Create();
+    void Make();
 };
