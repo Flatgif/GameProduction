@@ -5,9 +5,13 @@
 class Map : public GameObject
 {
     int hModel_[2];
-    int map_[15][15]; //二次元配列
-
+    struct
+    {
+        int type;
+        int height;
+    }map_[15][15];
 public:
+    Map();
     //コンストラクタ
     Map(GameObject* parent);
 
@@ -25,4 +29,6 @@ public:
 
     //開放
     void Release() override;
+
+    void Create();
 };

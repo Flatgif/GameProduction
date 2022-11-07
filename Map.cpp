@@ -1,5 +1,13 @@
 #include "Map.h"
+#include<stdio.h>
+#include <stdlib.h>
+#include<time.h>
+#include <conio.h>
+#include <ctype.h>
 #include "Engine/Model.h"
+
+
+
 
 //コンストラクタ
 Map::Map(GameObject* parent)
@@ -21,28 +29,6 @@ void Map::Initialize()
     hModel_[1] = Model::Load("yuka.fbx");
     assert(hModel_ >= 0);
 
-   
-   
-
-
-
-    for (int i = 0; i < 15; i++)
-    {
-        for (int j = 0; j < 15; j++)
-        {
-            map_[i][j] = 0;
-        }
-    }
-
-    for (int i = 1; i < 14; i++)
-    {
-        for (int j = 1; j < 14; j++)
-        {
-            map_[i][j] = 1;
-        }
-    }
-
-
 }
 
 //更新
@@ -53,10 +39,10 @@ void Map::Update()
 //描画
 void Map::Draw()
 {
-    for (int i = 0; i < 15; i++)
+    /*for (int i = 0; i < 32; i++)
     {
         transform_.position_.x = i;
-        for (int j = 0; j < 15; j++)
+        for (int j = 0; j < 32; j++)
         {
             int type = map_[i][j];
             transform_.position_.z = j;
@@ -64,7 +50,7 @@ void Map::Draw()
             Model::Draw(hModel_[type]);
 
         }
-    }
+    }*/
 
 }
 
@@ -72,3 +58,9 @@ void Map::Draw()
 void Map::Release()
 {
 }
+
+void Map::Create()
+{
+
+}
+
