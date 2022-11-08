@@ -4,14 +4,17 @@
 //◆◆◆を管理するクラス
 class Map : public GameObject
 {
-    int hModel_[2];
-    int width;
+    int hModel_[3];
+    int width_;
+    int random_;
     struct
     {
         int data;
         int type;
     }map_[31][31];
+
 public:
+    
     Map();
     //コンストラクタ
     Map(GameObject* parent);
@@ -31,6 +34,6 @@ public:
     //開放
     void Release() override;
 
-    void Create();
     void Make();
+    void DigHole();
 };
