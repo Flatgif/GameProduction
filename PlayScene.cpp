@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Map.h"
 #include "Engine/Camera.h"
+#include "Engine/Input.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject* parent)
@@ -12,15 +13,22 @@ PlayScene::PlayScene(GameObject* parent)
 //初期化
 void PlayScene::Initialize()
 {
-	//Instantiate<Player>(this);
+	Instantiate<Player>(this);
 	Instantiate<Map>(this);
-	Camera::SetPosition(XMFLOAT3(13, 45, 10));
-	Camera::SetTarget(XMFLOAT3(13, 0, 11));
+
+	
 }
 
 //更新
 void PlayScene::Update()
 {
+	if (Input::IsKey(DIK_Q))
+	{
+		Camera::SetPosition(XMFLOAT3(13, 45, 10));
+		Camera::SetTarget(XMFLOAT3(13, 0, 11));
+	}
+
+	
 }
 
 //描画

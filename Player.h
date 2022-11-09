@@ -5,6 +5,8 @@
 class Player : public GameObject
 {
     int hModel_;    //モデル番号
+    float move_;
+    float rota_;
 public:
     //コンストラクタ
     Player(GameObject* parent);

@@ -7,14 +7,14 @@ class Map : public GameObject
     int hModel_[3];
     int width_;
     int random_;
+     
     struct
     {
         int data;
         int type;
-    }map_[31][31];
+    }map_[100][100];
 
 public:
-    
     Map();
     //コンストラクタ
     Map(GameObject* parent);

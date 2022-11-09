@@ -11,7 +11,7 @@
 
 //コンストラクタ
 Map::Map(GameObject* parent)
-    :GameObject(parent, "Map"),width_(31),random_(0)
+    :GameObject(parent, "Map"),width_(41),random_(0)
 {
 }
 
@@ -43,10 +43,10 @@ void Map::Update()
 //描画
 void Map::Draw()
 {
-    for (int i = 0; i < 31; i++)
+    for (int i = 0; i < width_; i++)
     {
         transform_.position_.x = i;
-        for (int j = 0; j < 31; j++)
+        for (int j = 0; j < width_; j++)
         {
             int type = map_[i][j].type;
             transform_.position_.z = j;
