@@ -5,7 +5,8 @@
 
 //コンストラクタ
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1), move_(0.1f), rota_(2)
+	:GameObject(parent, "Player"), hModel_(-1)
+	, move_(0.1f), rota_(2),rotaFlag_(false),dig_(0),dir_(nullptr),rotating_(true)
 {
 }
 
@@ -31,28 +32,26 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
-	int num = 0;
 
-
-	if (Input::IsKeyDown(DIK_RIGHT))
+	if (rotating_)
 	{
-		while (num != 45)
+		if (Input::IsKeyDown(DIK_RIGHT))
 		{
-		transform_.rotate_.y += rota_;
-		num++;
+			rotaFlag_ = true;
+			dir_ = true;
+			dig_ = 0;
+			rotating_ = false;
 		}
-		
-	}
+		else if (Input::IsKeyDown(DIK_LEFT))
+		{
+			rotaFlag_ = true;
+			dir_ = false;
+			dig_ = 0;
+			rotating_ = false;
+		}
 
-	if (Input::IsKeyDown(DIK_LEFT))
-	{
-		while (num != 45)
-		{
-			transform_.rotate_.y -= rota_;
-			num++;
-		}
-		
 	}
+		
 
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
 	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //Y軸で()度回転;
@@ -93,7 +92,7 @@ void Player::Update()
 		XMStoreFloat3(&transform_.position_, vPos);
 	}
 
-	XMVECTOR vCam = XMVectorSet(0,0, -1, 0);
+	XMVECTOR vCam = XMVectorSet(0,0, -0.001, 0);
 	vCam = XMVector3TransformCoord(vCam, mRotateX);
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 	XMFLOAT3 camPos;
@@ -106,7 +105,11 @@ void Player::Update()
 		Camera::SetTarget(transform_.position_);
 
 	}
-
+	if (dig_ >= 45)
+	{
+		rotaFlag_ = false;
+		rotating_ = true;
+	}
 
 }
 
@@ -115,6 +118,24 @@ void Player::Draw()
 {
     //Model::SetTransform(hModel_, transform_);
     //Model::Draw(hModel_);
+	
+	if (dir_)
+	{
+		if (rotaFlag_)
+		{
+			transform_.rotate_.y += rota_;
+			dig_++;
+		}
+	}
+	else
+	{
+		if (rotaFlag_)
+		{
+			transform_.rotate_.y -= rota_;
+			dig_++;
+		}
+	}
+
 }
 
 //開放

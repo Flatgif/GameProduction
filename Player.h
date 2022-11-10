@@ -7,6 +7,11 @@ class Player : public GameObject
     int hModel_;    //モデル番号
     float move_;
     float rota_;
+    bool rotaFlag_;
+    bool rotating_;
+    int dig_;
+    bool dir_;
+
 public:
     //コンストラクタ
     Player(GameObject* parent);
