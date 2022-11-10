@@ -15,19 +15,21 @@ void PlayScene::Initialize()
 {
 	Instantiate<Player>(this);
 	Instantiate<Map>(this);
-
 	
 }
 
 //XV
 void PlayScene::Update()
 {
+	/*pos_ = new RootObject;
+	XMFLOAT3 playerPosition = ((Player*)pos_->FindObject("Player"))->GetPosition();
 	if (Input::IsKey(DIK_Q))
 	{
-		Camera::SetPosition(XMFLOAT3(13, 45, 10));
-		Camera::SetTarget(XMFLOAT3(13, 0, 11));
-	}
-
+		Camera::SetPosition(XMFLOAT3(playerPosition.x, 30, playerPosition.z));
+		Camera::SetTarget(XMFLOAT3(playerPosition));
+	}*/
+	Camera::SetPosition(XMFLOAT3(11, 30, 10));
+	Camera::SetTarget(XMFLOAT3(11,0,11));
 	
 }
 

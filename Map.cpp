@@ -11,7 +11,7 @@
 
 //コンストラクタ
 Map::Map(GameObject* parent)
-    :GameObject(parent, "Map"),width_(11),random_(0)
+	:GameObject(parent, "Map"), width_(51), random_(0), roomGP_(99), roomSize_(0)
 {
 }
 
@@ -30,6 +30,8 @@ void Map::Initialize()
     assert(hModel_ >= 0);
 	Make();
 	DigHole();
+	RoomGeneration();
+
 }
 
 //更新
@@ -286,5 +288,28 @@ void Map::DigHole()
 			break;
 		}
 
+	}
+}
+
+void Map::RoomGeneration()
+{
+	srand((unsigned int)time(NULL));
+	for (int i = 1; i < width_ - 5; i++)
+	{
+		for (int j = 1; j < width_ - 5; j++)
+		{
+			int genePprobability = rand() % 100 + 1;
+			roomSize_ = rand() % 4 + 2;
+			if (genePprobability > roomGP_)
+			{
+				for (int k = 0; k < roomSize_; k++)
+				{
+					for (int l = 0; l < roomSize_; l++)
+					{
+						map_[i + k][j + l].type = 2;
+					}
+				}
+			}
+		}
 	}
 }

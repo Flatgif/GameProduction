@@ -26,13 +26,12 @@ void Player::Initialize()
 	transform_.position_.y = 1.5f;
 	Camera::SetPosition(XMFLOAT3(transform_.position_));
 	Camera::SetTarget(XMFLOAT3(transform_.position_.x, transform_.position_.y, 11));
-
 }
 
 //çXêV
 void Player::Update()
 {
-
+	
 	if (rotating_)
 	{
 		if (Input::IsKeyDown(DIK_RIGHT))
@@ -118,8 +117,8 @@ void Player::Update()
 //ï`âÊ
 void Player::Draw()
 {
-    //Model::SetTransform(hModel_, transform_);
-    //Model::Draw(hModel_);
+    Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);
 	
 	if (dir_)
 	{
