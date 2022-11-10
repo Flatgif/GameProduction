@@ -6,7 +6,7 @@
 //コンストラクタ
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
-	, move_(0.1f), rota_(3),rotaFlag_(false),dig_(0),dir_(nullptr),rotating_(true)
+	, move_(0.1f), rota_(2.0f),rotaFlag_(false),dig_(0),dir_(nullptr),rotating_(true)
 {
 }
 
@@ -23,7 +23,7 @@ void Player::Initialize()
     assert(hModel_ >= 0);
 	transform_.position_.x = 1.0f;
 	transform_.position_.z = 1.0f;
-	transform_.position_.y = 1;
+	transform_.position_.y = 1.5f;
 	Camera::SetPosition(XMFLOAT3(transform_.position_));
 	Camera::SetTarget(XMFLOAT3(transform_.position_.x, transform_.position_.y, 11));
 
