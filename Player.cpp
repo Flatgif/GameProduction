@@ -67,29 +67,31 @@ void Player::Update()
 	vMove = XMVector3TransformCoord(vMove, mRotate);
 	vMoveX = XMVector3TransformCoord(vMoveX, mRotate);
 
-
-	if (Input::IsKeyDown(DIK_D))
+	if (rotating_)
 	{
-		vPos += vMoveX;
-		XMStoreFloat3(&transform_.position_, vPos);
-	}
+		if (Input::IsKeyDown(DIK_D))
+		{
+			vPos += vMoveX;
+			XMStoreFloat3(&transform_.position_, vPos);
+		}
 
-	if (Input::IsKeyDown(DIK_A))
-	{
-		vPos -= vMoveX;
-		XMStoreFloat3(&transform_.position_, vPos);
-	}
+		if (Input::IsKeyDown(DIK_A))
+		{
+			vPos -= vMoveX;
+			XMStoreFloat3(&transform_.position_, vPos);
+		}
 
-	if (Input::IsKeyDown(DIK_W))
-	{
-		vPos += vMove;
-		XMStoreFloat3(&transform_.position_, vPos);
-	}
+		if (Input::IsKeyDown(DIK_W))
+		{
+			vPos += vMove;
+			XMStoreFloat3(&transform_.position_, vPos);
+		}
 
-	if (Input::IsKeyDown(DIK_S))
-	{
-		vPos -= vMove;
-		XMStoreFloat3(&transform_.position_, vPos);
+		if (Input::IsKeyDown(DIK_S))
+		{
+			vPos -= vMove;
+			XMStoreFloat3(&transform_.position_, vPos);
+		}
 	}
 
 	XMVECTOR vCam = XMVectorSet(0,0, -0.001, 0);

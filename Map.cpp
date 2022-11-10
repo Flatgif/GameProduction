@@ -11,7 +11,7 @@
 
 //コンストラクタ
 Map::Map(GameObject* parent)
-    :GameObject(parent, "Map"),width_(41),random_(0)
+    :GameObject(parent, "Map"),width_(11),random_(0)
 {
 }
 
@@ -25,10 +25,7 @@ void Map::Initialize()
 {   
     //モデルデータのロード
     hModel_[0] = Model::Load("sikaku.fbx");
-    assert(hModel_ >= 0);
 	hModel_[1] = Model::Load("sikaku.fbx");
-	assert(hModel_ >= 0);
-
     hModel_[2] = Model::Load("yuka.fbx");
     assert(hModel_ >= 0);
 	Make();
