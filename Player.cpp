@@ -6,7 +6,7 @@
 //コンストラクタ
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
-	, move_(0.1f), rota_(2),rotaFlag_(false),dig_(0),dir_(nullptr),rotating_(true)
+	, move_(0.1f), rota_(3),rotaFlag_(false),dig_(0),dir_(nullptr),rotating_(true)
 {
 }
 
@@ -105,7 +105,7 @@ void Player::Update()
 		Camera::SetTarget(transform_.position_);
 
 	}
-	if (dig_ >= 45)
+	if (dig_ >= (float)(90/rota_))
 	{
 		rotaFlag_ = false;
 		rotating_ = true;

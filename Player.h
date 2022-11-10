@@ -5,11 +5,11 @@
 class Player : public GameObject
 {
     int hModel_;    //ƒ‚ƒfƒ‹”Ô†
+    int dig_;
     float move_;
     float rota_;
     bool rotaFlag_;
     bool rotating_;
-    int dig_;
     bool dir_;
 
 public:
