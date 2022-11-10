@@ -11,7 +11,7 @@
 
 //コンストラクタ
 Map::Map(GameObject* parent)
-	:GameObject(parent, "Map"), width_(51), random_(0), roomGP_(99), roomSize_(0)
+	:GameObject(parent, "Map"), width_(61),roomGP_(99)
 {
 }
 
@@ -29,9 +29,8 @@ void Map::Initialize()
     hModel_[2] = Model::Load("yuka.fbx");
     assert(hModel_ >= 0);
 	Make();
-	DigHole();
 	RoomGeneration();
-
+	DigHole();
 }
 
 //更新
@@ -51,10 +50,8 @@ void Map::Draw()
             transform_.position_.z = j;
             Model::SetTransform(hModel_[type], transform_);
             Model::Draw(hModel_[type]);
-
         }
     }
-
 }
 
 //開放
@@ -293,18 +290,19 @@ void Map::DigHole()
 
 void Map::RoomGeneration()
 {
+	int roomS = width_ / 10;
 	srand((unsigned int)time(NULL));
-	for (int i = 1; i < width_ - 5; i++)
+	for (int i = 1; i < width_ - (roomS+1); i++)
 	{
-		for (int j = 1; j < width_ - 5; j++)
+		for (int j = 1; j < width_ - (roomS+1); j++)
 		{
 			int genePprobability = rand() % 100 + 1;
-			roomSize_ = rand() % 4 + 2;
+			int roomSize = rand() % roomS + 2;
 			if (genePprobability > roomGP_)
 			{
-				for (int k = 0; k < roomSize_; k++)
+				for (int k = 0; k < roomSize; k++)
 				{
-					for (int l = 0; l < roomSize_; l++)
+					for (int l = 0; l < roomSize; l++)
 					{
 						map_[i + k][j + l].type = 2;
 					}

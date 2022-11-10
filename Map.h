@@ -6,9 +6,7 @@ class Map : public GameObject
 {
     int hModel_[3];
     int width_;
-    int random_;
     int roomGP_;
-    int roomSize_;
     struct
     {
         int data;
