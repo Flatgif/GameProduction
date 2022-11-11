@@ -8,10 +8,9 @@
 
 
 
-
 //コンストラクタ
 Map::Map(GameObject* parent)
-	:GameObject(parent, "Map"), width_(61),roomGP_(99)
+	:GameObject(parent, "Map"), width_(61), roomGP_(99)
 {
 }
 
@@ -22,12 +21,15 @@ Map::~Map()
 
 //初期化
 void Map::Initialize()
-{   
-    //モデルデータのロード
-    hModel_[0] = Model::Load("sikaku.fbx");
+{
+	//モデルデータのロード
+	//外郭のモデル
+	hModel_[0] = Model::Load("sikaku.fbx");
+	//壁のモデル
 	hModel_[1] = Model::Load("sikaku.fbx");
-    hModel_[2] = Model::Load("yuka.fbx");
-    assert(hModel_ >= 0);
+	//床のモデル
+	hModel_[2] = Model::Load("yuka.fbx");
+	assert(hModel_ >= 0);
 	Make();
 	RoomGeneration();
 	DigHole();
@@ -41,17 +43,17 @@ void Map::Update()
 //描画
 void Map::Draw()
 {
-    for (int i = 0; i < width_; i++)
-    {
-        transform_.position_.x = i;
-        for (int j = 0; j < width_; j++)
-        {
-            int type = map_[i][j].type;
-            transform_.position_.z = j;
-            Model::SetTransform(hModel_[type], transform_);
-            Model::Draw(hModel_[type]);
-        }
-    }
+	for (int i = 0; i < width_; i++)
+	{
+		transform_.position_.x = i;
+		for (int j = 0; j < width_; j++)
+		{
+			int type = map_[i][j].type;
+			transform_.position_.z = j;
+			Model::SetTransform(hModel_[type], transform_);
+			Model::Draw(hModel_[type]);
+		}
+	}
 }
 
 //開放
@@ -59,7 +61,7 @@ void Map::Release()
 {
 }
 
-
+//すべて壁のダンジョン（マップ）生成
 void Map::Make()
 {
 	int  Init = 1;
@@ -97,6 +99,7 @@ void Map::Make()
 	}
 }
 
+//穴掘り法
 void Map::DigHole()
 {
 	srand((unsigned int)time(NULL));
@@ -288,13 +291,18 @@ void Map::DigHole()
 	}
 }
 
+//部屋の作成
 void Map::RoomGeneration()
 {
-	int roomS = width_ / 10;
-	srand((unsigned int)time(NULL));
-	for (int i = 1; i < width_ - (roomS+1); i++)
+	int roomS = 1;
+	if (width_ > 9)
 	{
-		for (int j = 1; j < width_ - (roomS+1); j++)
+		roomS = width_ / 10;
+	}
+	srand((unsigned int)time(NULL));
+	for (int i = 1; i < width_ - (roomS + 1); i++)
+	{
+		for (int j = 1; j < width_ - (roomS + 1); j++)
 		{
 			int genePprobability = rand() % 100 + 1;
 			int roomSize = rand() % roomS + 2;
