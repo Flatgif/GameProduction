@@ -14,6 +14,20 @@ class Player : public GameObject
     bool dir_;
     Map* pMap;
 
+     enum bol {
+        front = 0,
+        right,
+        left,
+        back,
+        Maxnum,
+    };
+
+    struct a {
+        bool iswall;
+    };
+    
+    
+
 public:
     //コンストラクタ
     Player(GameObject* parent);
@@ -33,5 +47,5 @@ public:
     //開放
     void Release() override;
 
-    bool Col();
+    void Col(a *flag);
 };

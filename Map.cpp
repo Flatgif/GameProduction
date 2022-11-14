@@ -11,7 +11,7 @@
 
 //コンストラクタ
 Map::Map(GameObject* parent)
-	:GameObject(parent, "Map"), width_(31), roomGP_(98)
+	:GameObject(parent, "Map"), width_(31), roomGP_(99)
 {
 }
 
