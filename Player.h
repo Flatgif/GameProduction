@@ -32,4 +32,6 @@ public:
 
     //ŠJ•ú
     void Release() override;
+
+    bool Col();
 };

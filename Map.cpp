@@ -325,5 +325,10 @@ void Map::RoomGeneration()
 
 bool Map::IsWall(int x, int z)
 {
-	return (map_[x][z].data == 0);
+	return (map_[x][z].type == 0 || map_[x][z].type == 1);
+}
+
+bool Map::IsFloor(int x, int z)
+{
+	return(map_[x][z].type == 2);
 }

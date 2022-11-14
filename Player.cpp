@@ -19,14 +19,16 @@ Player::~Player()
 void Player::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("sikaku.fbx");
+    hModel_ = Model::Load("yuka.fbx");
     assert(hModel_ >= 0);
 	pMap = (Map*)FindObject("Map");
-	assert(pMap != nullptr);
-
-	transform_.position_.x = 1.0f;
-	transform_.position_.z = 1.0f;
+	//assert(pMap != nullptr);
+	srand((unsigned int)time(NULL));
 	transform_.position_.y = 1.5f;
+	
+		transform_.position_.x = 1.0f;
+		transform_.position_.z = 1.0f;
+	
 	Camera::SetPosition(XMFLOAT3(transform_.position_));
 	Camera::SetTarget(XMFLOAT3(transform_.position_.x, transform_.position_.y, 11));
 }
@@ -60,17 +62,18 @@ void Player::Update()
 
 	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);//positionもベクトルに変換
 
-	XMFLOAT3 move = { 0, 0, 1 };
-	XMFLOAT3 moveX = { 1, 0, 0 };
+	XMFLOAT3 move = { 0, 0, 1.0f };
+	XMFLOAT3 moveX = { 1.0f, 0, 0 };
 	
 	XMVECTOR vMove = XMLoadFloat3(&move);
 	XMVECTOR vMoveX = XMLoadFloat3(&moveX);
 
 	vMove = XMVector3TransformCoord(vMove, mRotate);
 	vMoveX = XMVector3TransformCoord(vMoveX, mRotate);
-
+	XMFLOAT3 prevPosition = transform_.position_;
 	if (rotating_)
 	{
+		
 
 		if (Input::IsKeyDown(DIK_D))
 		{
@@ -95,9 +98,10 @@ void Player::Update()
 			vPos -= vMove;
 			XMStoreFloat3(&transform_.position_, vPos);
 		}
+		
 
 	}
-
+	XMFLOAT3 nowPosition = transform_.position_;
 	XMVECTOR vCam = XMVectorSet(0,0, -0.001, 0);
 	vCam = XMVector3TransformCoord(vCam, mRotateX);
 	vCam = XMVector3TransformCoord(vCam, mRotate);
@@ -116,36 +120,9 @@ void Player::Update()
 		rotaFlag_ = false;
 		rotating_ = true;
 	}
-	int checkX, checkZ;
 
-	checkX = (int)(transform_.position_.x);
-	checkZ = (int)(transform_.position_.z + 0.5f);
 
-	if (pMap->IsWall(checkX, checkZ))
-	{
-		transform_.position_.z = (float)((int)(transform_.position_.z + 0.5f)) - 0.5f;
-	}
-	checkX = (int)(transform_.position_.x);
-	checkZ = (int)(transform_.position_.z - 0.5f);
 
-	if (pMap->IsWall(checkX, checkZ))
-	{
-		transform_.position_.z = (float)((int)(transform_.position_.z + 0.5f)) + 0.5f;
-	}
-	checkX = (int)(transform_.position_.x + 0.5f);
-	checkZ = (int)(transform_.position_.z);
-
-	if (pMap->IsWall(checkX, checkZ))
-	{
-		transform_.position_.x = (float)((int)(transform_.position_.x + 0.5f)) - 0.5f;
-	}
-	checkX = (int)(transform_.position_.x - 0.5f);
-	checkZ = (int)(transform_.position_.z);
-
-	if (pMap->IsWall(checkX, checkZ))
-	{
-		transform_.position_.x = (float)((int)(transform_.position_.x + 0.5f)) + 0.5f;
-	}
 
 
 
@@ -179,4 +156,39 @@ void Player::Draw()
 //開放
 void Player::Release()
 {
+}
+
+bool Player::Col()
+{
+	int checkX, checkZ;
+
+	checkX = (int)(transform_.position_.x);
+	checkZ = (int)(transform_.position_.z);
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		return true;
+	}
+
+	checkX = (int)(transform_.position_.x);
+	checkZ = (int)(transform_.position_.z - 0.4f);
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		return true;
+	}
+
+	checkX = (int)(transform_.position_.x + 0.4f);
+	checkZ = (int)(transform_.position_.z);
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		return true;
+	}
+
+	checkX = (int)(transform_.position_.x - 0.4f);
+	checkZ = (int)(transform_.position_.z);
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		return true;
+	}
+	return false;
+
 }
