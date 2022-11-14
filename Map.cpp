@@ -8,9 +8,10 @@
 
 
 
+
 //コンストラクタ
 Map::Map(GameObject* parent)
-	:GameObject(parent, "Map"), width_(61), roomGP_(99)
+	:GameObject(parent, "Map"), width_(31), roomGP_(98)
 {
 }
 
@@ -30,6 +31,7 @@ void Map::Initialize()
 	//床のモデル
 	hModel_[2] = Model::Load("yuka.fbx");
 	assert(hModel_ >= 0);
+
 	Make();
 	RoomGeneration();
 	DigHole();
@@ -38,6 +40,7 @@ void Map::Initialize()
 //更新
 void Map::Update()
 {
+
 }
 
 //描画
@@ -318,4 +321,9 @@ void Map::RoomGeneration()
 			}
 		}
 	}
+}
+
+bool Map::IsWall(int x, int z)
+{
+	return (map_[x][z].data == 0);
 }

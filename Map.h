@@ -7,6 +7,7 @@ class Map : public GameObject
     int hModel_[3];
     int width_;
     int roomGP_;
+
     struct
     {
         int data;
@@ -14,7 +15,6 @@ class Map : public GameObject
     }map_[100][100];
 
 public:
-    Map();
     //コンストラクタ
     Map(GameObject* parent);
 
@@ -36,4 +36,6 @@ public:
     void Make();
     void DigHole();
     void RoomGeneration();
+    bool IsWall(int x, int z);
+
 };

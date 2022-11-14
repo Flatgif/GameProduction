@@ -12,6 +12,8 @@ class Player : public GameObject
     bool rotaFlag_;
     bool rotating_;
     bool dir_;
+    Map* pMap;
+
 public:
     //コンストラクタ
     Player(GameObject* parent);

@@ -21,6 +21,9 @@ void Player::Initialize()
     //モデルデータのロード
     hModel_ = Model::Load("sikaku.fbx");
     assert(hModel_ >= 0);
+	pMap = (Map*)FindObject("Map");
+	assert(pMap != nullptr);
+
 	transform_.position_.x = 1.0f;
 	transform_.position_.z = 1.0f;
 	transform_.position_.y = 1.5f;
@@ -68,6 +71,7 @@ void Player::Update()
 
 	if (rotating_)
 	{
+
 		if (Input::IsKeyDown(DIK_D))
 		{
 			vPos += vMoveX;
@@ -91,6 +95,7 @@ void Player::Update()
 			vPos -= vMove;
 			XMStoreFloat3(&transform_.position_, vPos);
 		}
+
 	}
 
 	XMVECTOR vCam = XMVectorSet(0,0, -0.001, 0);
@@ -111,6 +116,38 @@ void Player::Update()
 		rotaFlag_ = false;
 		rotating_ = true;
 	}
+	int checkX, checkZ;
+
+	checkX = (int)(transform_.position_.x);
+	checkZ = (int)(transform_.position_.z + 0.5f);
+
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		transform_.position_.z = (float)((int)(transform_.position_.z + 0.5f)) - 0.5f;
+	}
+	checkX = (int)(transform_.position_.x);
+	checkZ = (int)(transform_.position_.z - 0.5f);
+
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		transform_.position_.z = (float)((int)(transform_.position_.z + 0.5f)) + 0.5f;
+	}
+	checkX = (int)(transform_.position_.x + 0.5f);
+	checkZ = (int)(transform_.position_.z);
+
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		transform_.position_.x = (float)((int)(transform_.position_.x + 0.5f)) - 0.5f;
+	}
+	checkX = (int)(transform_.position_.x - 0.5f);
+	checkZ = (int)(transform_.position_.z);
+
+	if (pMap->IsWall(checkX, checkZ))
+	{
+		transform_.position_.x = (float)((int)(transform_.position_.x + 0.5f)) + 0.5f;
+	}
+
+
 
 }
 
