@@ -7,24 +7,12 @@ class Player : public GameObject
 {
     int hModel_;    //ÉÇÉfÉãî‘çÜ
     int dig_;
-    float move_;
     float rota_;
     bool rotaFlag_;
-    bool rotating_;
     bool dir_;
     Map* pMap;
-
-     enum bol {
-        front = 0,
-        right,
-        left,
-        back,
-        Maxnum,
-    };
-
-    struct a {
-        bool iswall;
-    };
+    XMFLOAT3 prevPosition_;
+    XMFLOAT3 nowPosition_;
     
     
 
@@ -47,5 +35,4 @@ public:
     //äJï˙
     void Release() override;
 
-    void Col(a *flag);
 };
