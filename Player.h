@@ -10,10 +10,17 @@ class Player : public GameObject
     float rota_;
     bool rotaFlag_;
     bool dir_;
+    bool move_;
     Map* pMap;
     XMFLOAT3 prevPosition_;
     XMFLOAT3 nowPosition_;
-    
+    enum Flag
+    {
+        def = 0,
+        rota,
+        dir,
+        move=4,
+    };
     
 
 public:

@@ -6,7 +6,7 @@
 //コンストラクタ
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
-	, rota_(2.0f), rotaFlag_(false), dig_(0), dir_(nullptr)
+	, rota_(2.0f), rotaFlag_(false), dig_(0), dir_(nullptr),move_(false)
 {
 }
 
@@ -35,114 +35,25 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
-	if (rotating_)
-	{
-		if (Input::IsKeyDown(DIK_RIGHT))
-		{
-			rotaFlag_ = true;
-			dir_ = true;
-			dig_ = 0;
-		}
-		else if (Input::IsKeyDown(DIK_LEFT))
-		{
-			rotaFlag_ = true;
-			dir_ = false;
-			dig_ = 0;
-		}
 
-	}
-
-
-	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
-	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //Y軸で()度回転;
-
-	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);//positionもベクトルに変換
-	XMVECTOR prePos = XMLoadFloat3(&transform_.position_);
-
-	XMFLOAT3 move = { 0, 0, 1.0f };
-	XMFLOAT3 moveX = { 1.0f, 0, 0 };
-
-	XMVECTOR vMove = XMLoadFloat3(&move);
-	XMVECTOR vMoveX = XMLoadFloat3(&moveX);
-
-	vMove = XMVector3TransformCoord(vMove, mRotate);
-	vMoveX = XMVector3TransformCoord(vMoveX, mRotate);
-	
 	if (!rotaFlag_)
 	{
-		Transform trans = transform_;
-
-		if (Input::IsKeyDown(DIK_D))
+		if (!move_)
 		{
-			prePos += vMoveX;
-			XMStoreFloat3(&trans.position_, prePos);
-
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			if (Input::IsKeyDown(DIK_RIGHT))
 			{
-				vPos += vMoveX;
+				rotaFlag_ = true;
+				dir_ = true;
+				dig_ = 0;
+			}
+			else if (Input::IsKeyDown(DIK_LEFT))
+			{
+				rotaFlag_ = true;
+				dir_ = false;
+				dig_ = 0;
 			}
 		}
-
-		if (Input::IsKeyDown(DIK_A))
-		{
-			prePos -= vMoveX;
-			XMStoreFloat3(&trans.position_, prePos);
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
-			{
-				vPos -= vMoveX;
-			}
-		}
-
-		if (Input::IsKeyDown(DIK_W))
-		{
-			prePos += vMove;
-			XMStoreFloat3(&trans.position_, prePos);
-
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
-			{
-				vPos += vMove;
-			}
-		}
-
-		if (Input::IsKeyDown(DIK_S))
-		{
-			prePos -= vMove;
-			XMStoreFloat3(&trans.position_, prePos);
-
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
-			{
-				vPos -= vMove;
-			}
-		}
-
-		XMStoreFloat3(&transform_.position_, vPos);
 	}
-	XMFLOAT3 nowPosition = transform_.position_;
-	XMVECTOR vCam = XMVectorSet(0, 0, -0.001, 0);
-	vCam = XMVector3TransformCoord(vCam, mRotateX);
-	vCam = XMVector3TransformCoord(vCam, mRotate);
-	XMFLOAT3 camPos;
-	XMStoreFloat3(&camPos, vPos + vCam);
-	XMVECTOR myself = XMLoadFloat3(&camPos);
-	XMVECTOR target = XMLoadFloat3(&transform_.position_);
-	if (!Input::IsKey(DIK_Q))
-	{
-		Camera::SetPosition(camPos);
-		Camera::SetTarget(transform_.position_);
-
-	}
-	if (dig_ >= (float)(90 / rota_))
-	{
-		rotaFlag_ = false;
-	}
-}
-
-//描画
-void Player::Draw()
-{
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
-
 	if (dir_)
 	{
 		if (rotaFlag_)
@@ -159,6 +70,116 @@ void Player::Draw()
 			dig_++;
 		}
 	}
+	if (dig_ >= (float)(90 / rota_))
+	{
+		rotaFlag_ = false;
+	}
+
+	Transform trans = transform_;
+	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
+	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //x軸で()度回転;
+	XMVECTOR vCam = XMVectorSet(0, 4, -2, 0);
+	vCam = XMVector3TransformCoord(vCam, mRotateX);
+	vCam = XMVector3TransformCoord(vCam, mRotate);
+
+	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);//positionもベクトルに変換
+	XMVECTOR prePos = XMLoadFloat3(&transform_.position_);
+
+	XMFLOAT3 move = { 0, 0, 1.0f };
+	XMFLOAT3 moveX = { 1.0f, 0, 0 };
+
+	XMVECTOR vMove = XMLoadFloat3(&move);
+	XMVECTOR vMoveX = XMLoadFloat3(&moveX);
+
+	vMove = XMVector3TransformCoord(vMove, mRotate);
+	vMoveX = XMVector3TransformCoord(vMoveX, mRotate);
+	
+	if (!rotaFlag_)
+	{
+		
+
+		if (Input::IsKeyDown(DIK_D))
+		{
+			move_ = true;
+			prePos += vMoveX;
+			XMStoreFloat3(&trans.position_, prePos);
+			trans = transform_;
+			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			{
+				vPos += vMoveX;
+			}
+			XMStoreFloat3(&transform_.position_, vPos);
+
+		}
+
+		if (Input::IsKeyDown(DIK_A))
+		{
+			move_ = true;
+			prePos -= vMoveX;
+			trans = transform_;
+			XMStoreFloat3(&trans.position_, prePos);
+			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			{
+				vPos -= vMoveX;
+			}
+			XMStoreFloat3(&transform_.position_, vPos);
+
+		}
+
+		if (Input::IsKeyDown(DIK_W))
+		{
+			move_ = true;
+			prePos += vMove;
+			trans = transform_;
+			XMStoreFloat3(&trans.position_, prePos);
+
+			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			{
+				vPos += vMove;
+			}
+			XMStoreFloat3(&transform_.position_, vPos);
+
+		}
+
+		if (Input::IsKeyDown(DIK_S))
+		{
+			move_ = true;
+			prePos -= vMove;
+			trans = transform_;
+			XMStoreFloat3(&trans.position_, prePos);
+
+			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			{
+				vPos -= vMove;
+			}
+			XMStoreFloat3(&transform_.position_, vPos);
+
+		}
+
+		move_ = false;
+	}
+	XMFLOAT3 nowPosition = transform_.position_;
+	XMFLOAT3 camPos;
+	XMStoreFloat3(&camPos, vPos + vCam);
+
+	XMVECTOR myself = XMLoadFloat3(&camPos);
+	XMVECTOR target = XMLoadFloat3(&transform_.position_);
+	if (!Input::IsKey(DIK_Q))
+	{
+		Camera::SetPosition(camPos);
+		Camera::SetTarget(transform_.position_);
+
+	}
+
+
+}
+
+//描画
+void Player::Draw()
+{
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
+
 
 }
 
