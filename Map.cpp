@@ -33,8 +33,9 @@ void Map::Initialize()
 	assert(hModel_ >= 0);
 
 	Make();
-	RoomGeneration();
+	//RoomGeneration();
 	DigHole();
+	Check();
 }
 
 //XV
@@ -102,6 +103,72 @@ void Map::Make()
 	}
 }
 
+
+void Map::Check()
+{
+	srand((unsigned int)time(NULL));
+	int i;
+	int brute[4] = { 1,2,3,4 }, ra, kp;
+	int x = width_ - 2, y = 1, move = 1;
+	for (i = 0; i < 4; i++) {
+		ra = rand() % 4;
+		kp = brute[i];
+		brute[i] = brute[ra];
+		brute[ra] = kp;
+	}
+	if ((map_[y][x - 1].type != 2) && (map_[y + 1][x].type != 2))
+	{
+		map_[y][x].type = 2;
+		while (1)
+		{
+			move = rand() % 2 + 1;
+			switch (move)
+			{
+			case 1:
+				for (i = 0; i < 2; i++)
+				{
+					y = y + 1;
+
+					map_[y][x].type = 2;
+				}
+				if (map_[y][x - 1].type != 2)
+				{
+					for (i = 0; i < 2; i++)
+					{
+						y = y + 1;
+
+						map_[y][x].type = 2;
+					}
+				}
+			case 2:
+				for (i = 0; i < 2; i++)
+				{
+					x = x - 1;
+
+					map_[y][x].type = 2;
+				}
+				if (map_[y + 1][x].type != 2) {
+					for (i = 0; i < 2; i++)
+					{
+						x = x - 1;
+
+						map_[y][x].type = 2;
+					}
+				}
+				break;
+			default:
+				break;
+			}
+			if ((map_[y][x - 1].type != 2) && (map_[y + 1][x].type != 2))
+			{
+				continue;
+			}
+			else {
+				break;
+			}
+		}
+	}
+}
 //ŒŠŒ@‚è–@
 void Map::DigHole()
 {
@@ -325,7 +392,7 @@ void Map::RoomGeneration()
 
 bool Map::IsWall(int x, int z)
 {
-	return (map_[x][z].type == 0 || map_[x][z].type == 1);
+	return (map_[x][z].type == 1 || map_[x][z].type == 0);
 }
 
 bool Map::IsFloor(int x, int z)

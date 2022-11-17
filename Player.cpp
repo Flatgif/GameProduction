@@ -78,15 +78,15 @@ void Player::Update()
 	Transform trans = transform_;
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
 	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //x軸で()度回転;
-	XMVECTOR vCam = XMVectorSet(0, 4, -2, 0);
+	XMVECTOR vCam = XMVectorSet(0,	0, -0.001, 0);
 	vCam = XMVector3TransformCoord(vCam, mRotateX);
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 
 	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);//positionもベクトルに変換
 	XMVECTOR prePos = XMLoadFloat3(&transform_.position_);
 
-	XMFLOAT3 move = { 0, 0, 1.0f };
-	XMFLOAT3 moveX = { 1.0f, 0, 0 };
+	XMFLOAT3 move = { 0, 0, 0.02f };
+	XMFLOAT3 moveX = { 0.02f, 0, 0 };
 
 	XMVECTOR vMove = XMLoadFloat3(&move);
 	XMVECTOR vMoveX = XMLoadFloat3(&moveX);
@@ -98,7 +98,7 @@ void Player::Update()
 	{
 		
 
-		if (Input::IsKeyDown(DIK_D))
+		if (Input::IsKey(DIK_D))
 		{
 			move_ = true;
 			prePos += vMoveX;
@@ -112,7 +112,7 @@ void Player::Update()
 
 		}
 
-		if (Input::IsKeyDown(DIK_A))
+		if (Input::IsKey(DIK_A))
 		{
 			move_ = true;
 			prePos -= vMoveX;
@@ -126,7 +126,7 @@ void Player::Update()
 
 		}
 
-		if (Input::IsKeyDown(DIK_W))
+		if (Input::IsKey(DIK_W))
 		{
 			move_ = true;
 			prePos += vMove;
@@ -141,7 +141,7 @@ void Player::Update()
 
 		}
 
-		if (Input::IsKeyDown(DIK_S))
+		if (Input::IsKey(DIK_S))
 		{
 			move_ = true;
 			prePos -= vMove;

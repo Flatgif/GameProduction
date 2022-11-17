@@ -36,6 +36,7 @@ public:
     void Make();
     void DigHole();
     void RoomGeneration();
+    void Check();
     bool IsWall(int x, int z);
     bool IsFloor(int x, int z);
 };
