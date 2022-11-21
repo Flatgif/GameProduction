@@ -35,7 +35,7 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
-
+	XMFLOAT3 prePosition = transform_.position_;
 	if (!rotaFlag_)
 	{
 		if (!move_)
@@ -72,6 +72,7 @@ void Player::Update()
 	}
 	if (dig_ >= (float)(90 / rota_))
 	{
+
 		rotaFlag_ = false;
 	}
 
@@ -83,10 +84,10 @@ void Player::Update()
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 
 	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);//positionもベクトルに変換
-	XMVECTOR prePos = XMLoadFloat3(&transform_.position_);
+	XMVECTOR nPos = XMLoadFloat3(&transform_.position_);
 
-	XMFLOAT3 move = { 0, 0, 0.02f };
-	XMFLOAT3 moveX = { 0.02f, 0, 0 };
+	XMFLOAT3 move = { 0, 0, 1.0f };
+	XMFLOAT3 moveX = { 1.0f, 0, 0 };
 
 	XMVECTOR vMove = XMLoadFloat3(&move);
 	XMVECTOR vMoveX = XMLoadFloat3(&moveX);
@@ -98,12 +99,12 @@ void Player::Update()
 	{
 		
 
-		if (Input::IsKey(DIK_D))
+		if (Input::IsKeyDown(DIK_D))
 		{
 			move_ = true;
-			prePos += vMoveX;
-			XMStoreFloat3(&trans.position_, prePos);
 			trans = transform_;
+			nPos += vMoveX;
+			XMStoreFloat3(&trans.position_, nPos);
 			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
 			{
 				vPos += vMoveX;
@@ -112,12 +113,11 @@ void Player::Update()
 
 		}
 
-		if (Input::IsKey(DIK_A))
+		if (Input::IsKeyDown(DIK_A))
 		{
-			move_ = true;
-			prePos -= vMoveX;
 			trans = transform_;
-			XMStoreFloat3(&trans.position_, prePos);
+			nPos -= vMoveX;
+			XMStoreFloat3(&trans.position_, nPos);
 			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
 			{
 				vPos -= vMoveX;
@@ -126,12 +126,12 @@ void Player::Update()
 
 		}
 
-		if (Input::IsKey(DIK_W))
+		if (Input::IsKeyDown(DIK_W))
 		{
-			move_ = true;
-			prePos += vMove;
 			trans = transform_;
-			XMStoreFloat3(&trans.position_, prePos);
+			move_ = true;
+			nPos += vMove;
+			XMStoreFloat3(&trans.position_, nPos);
 
 			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
 			{
@@ -141,20 +141,20 @@ void Player::Update()
 
 		}
 
-		if (Input::IsKey(DIK_S))
+		if (Input::IsKeyDown(DIK_S))
 		{
-			move_ = true;
-			prePos -= vMove;
 			trans = transform_;
-			XMStoreFloat3(&trans.position_, prePos);
+			move_ = true;
+			nPos -= vMove;
+			XMStoreFloat3(&trans.position_, nPos);
 
 			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
 			{
 				vPos -= vMove;
 			}
 			XMStoreFloat3(&transform_.position_, vPos);
-
 		}
+		
 
 		move_ = false;
 	}
@@ -166,6 +166,7 @@ void Player::Update()
 	XMVECTOR target = XMLoadFloat3(&transform_.position_);
 	if (!Input::IsKey(DIK_Q))
 	{
+
 		Camera::SetPosition(camPos);
 		Camera::SetTarget(transform_.position_);
 
