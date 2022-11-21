@@ -79,7 +79,7 @@ void Player::Update()
 	Transform trans = transform_;
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //YŽ²‚Å()“x‰ñ“];
 	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //xŽ²‚Å()“x‰ñ“];
-	XMVECTOR vCam = XMVectorSet(0,	0, -0.001, 0);
+	XMVECTOR vCam = XMVectorSet(0,	0, -0.1, 0);
 	vCam = XMVector3TransformCoord(vCam, mRotateX);
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 
