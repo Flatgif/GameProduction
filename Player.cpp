@@ -6,7 +6,7 @@
 //コンストラクタ
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
-	, rota_(2.0f), rotaFlag_(false), dig_(0), dir_(nullptr),move_(false)
+	, rota_(2.0f), rotaFlag_(false), dig_(0), dir_(nullptr), move_(false)
 {
 }
 
@@ -19,7 +19,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	//モデルデータのロード
-	hModel_ = Model::Load("sikaku.fbx");
+	hModel_ = Model::Load("enemy.fbx");
 	assert(hModel_ >= 0);
 	pMap = (Map*)FindObject("Map");
 	//assert(pMap != nullptr);
@@ -27,7 +27,7 @@ void Player::Initialize()
 
 	transform_.position_.x = 1.0f;
 	transform_.position_.z = 1.0f;
-
+	transform_.scale_ = XMFLOAT3(0.5f, 0.5f, 0.5f);
 	Camera::SetPosition(XMFLOAT3(transform_.position_));
 	Camera::SetTarget(XMFLOAT3(transform_.position_.x, transform_.position_.y, 11));
 }
@@ -79,7 +79,7 @@ void Player::Update()
 	Transform trans = transform_;
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
 	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //x軸で()度回転;
-	XMVECTOR vCam = XMVectorSet(0,	0, -0.1, 0);
+	XMVECTOR vCam = XMVectorSet(0, 0, -0.1, 0);
 	vCam = XMVector3TransformCoord(vCam, mRotateX);
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 
@@ -94,10 +94,10 @@ void Player::Update()
 
 	vMove = XMVector3TransformCoord(vMove, mRotate);
 	vMoveX = XMVector3TransformCoord(vMoveX, mRotate);
-	
+
 	if (!rotaFlag_)
 	{
-		
+
 
 		if (Input::IsKeyDown(DIK_D))
 		{
@@ -109,12 +109,12 @@ void Player::Update()
 			{
 				vPos += vMoveX;
 			}
-			XMStoreFloat3(&transform_.position_, vPos);
 
 		}
 
 		if (Input::IsKeyDown(DIK_A))
 		{
+			move_ = true;
 			trans = transform_;
 			nPos -= vMoveX;
 			XMStoreFloat3(&trans.position_, nPos);
@@ -122,14 +122,13 @@ void Player::Update()
 			{
 				vPos -= vMoveX;
 			}
-			XMStoreFloat3(&transform_.position_, vPos);
 
 		}
 
 		if (Input::IsKeyDown(DIK_W))
 		{
-			trans = transform_;
 			move_ = true;
+			trans = transform_;
 			nPos += vMove;
 			XMStoreFloat3(&trans.position_, nPos);
 
@@ -137,14 +136,13 @@ void Player::Update()
 			{
 				vPos += vMove;
 			}
-			XMStoreFloat3(&transform_.position_, vPos);
 
 		}
 
 		if (Input::IsKeyDown(DIK_S))
 		{
-			trans = transform_;
 			move_ = true;
+			trans = transform_;
 			nPos -= vMove;
 			XMStoreFloat3(&trans.position_, nPos);
 
@@ -152,12 +150,15 @@ void Player::Update()
 			{
 				vPos -= vMove;
 			}
-			XMStoreFloat3(&transform_.position_, vPos);
 		}
-		
+
 
 		move_ = false;
 	}
+	XMStoreFloat3(&transform_.position_, vPos);
+
+
+
 	XMFLOAT3 nowPosition = transform_.position_;
 	XMFLOAT3 camPos;
 	XMStoreFloat3(&camPos, vPos + vCam);

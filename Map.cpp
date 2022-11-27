@@ -11,7 +11,7 @@
 
 //コンストラクタ
 Map::Map(GameObject* parent)
-	:GameObject(parent, "Map"), width_(31), roomGP_(99)
+	:GameObject(parent, "Map"), width_(31), roomGP_(97)
 {
 }
 
@@ -33,9 +33,9 @@ void Map::Initialize()
 	assert(hModel_ >= 0);
 
 	Make();
-	//RoomGeneration();
+	RoomGeneration();
 	DigHole();
-	Check();
+	//Check();
 }
 
 //更新
@@ -91,13 +91,7 @@ void Map::Make()
 			}
 			else
 			{
-				if (width_ == 5) {
-					map_[i][j].type = 2;
-				}
-				else {
-					map_[i][j].type = 1;
-				}
-
+				map_[i][j].type = 1;
 			}
 		}
 	}
@@ -392,7 +386,7 @@ void Map::RoomGeneration()
 
 bool Map::IsWall(int x, int z)
 {
-	return (map_[x][z].type == 1 || map_[x][z].type == 0);
+	return (map_[x][z].type == 0 || map_[x][z].type == 1);
 }
 
 bool Map::IsFloor(int x, int z)
