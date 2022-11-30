@@ -43,7 +43,6 @@ void Map::Initialize()
 //XV
 void Map::Update()
 {
-
 }
 
 //•`‰æ
@@ -382,6 +381,7 @@ void Map::RoomGeneration()
 			{
 				for (int k = 0; k < roomSize; k++)
 				{
+					
 					for (int l = 0; l < roomSize; l++)
 					{
 						map_[i + k][j + l].type = 2;

@@ -2,6 +2,7 @@
 #include "Engine/Camera.h"
 #include "Engine/Model.h"
 #include "Engine/Input.h"
+#include "Engine/Global.h"
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -22,9 +23,9 @@ void Player::Initialize()
 	hModel_ = Model::Load("enemy.fbx");
 	assert(hModel_ >= 0);
 	pMap = (Map*)FindObject("Map");
-	//assert(pMap != nullptr);
-	transform_.position_.y = 1.5f;
+	assert(pMap != nullptr);
 
+	transform_.position_.y = 1.5f;
 	transform_.position_.x = 1.0f;
 	transform_.position_.z = 1.0f;
 	transform_.scale_ = XMFLOAT3(0.5f, 0.5f, 0.5f);
@@ -79,7 +80,7 @@ void Player::Update()
 	Transform trans = transform_;
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
 	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //x軸で()度回転;
-	XMVECTOR vCam = XMVectorSet(0, 0, -0.1, 0);
+	XMVECTOR vCam = XMVectorSet(0, 0, -0.0001, 0);
 	vCam = XMVector3TransformCoord(vCam, mRotateX);
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 
@@ -172,8 +173,7 @@ void Player::Update()
 		Camera::SetTarget(transform_.position_);
 
 	}
-
-
+	
 }
 
 //描画
@@ -188,5 +188,6 @@ void Player::Draw()
 //開放
 void Player::Release()
 {
+	SAFE_RELEASE(pMap);
 }
 

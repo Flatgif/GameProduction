@@ -22,6 +22,26 @@ class Player : public GameObject
         move=4,
     };
     
+    typedef struct {
+        //体力
+        int HP;
+        //最大体力
+        int MAXHP;
+        //レベル
+        int LV; 
+        //ちから
+        int STR; 
+        //攻撃力
+        int ATK;
+        //防御力
+        int DEF; 
+        //所持金
+        int GOLD;
+        //経験値
+        int EXP; 
+    }STATUS_t;
+
+    STATUS_t player_ = { 15 , 15 , 1 , 5 , 5 , 0, 0, 0 };
 
 public:
     //コンストラクタ
