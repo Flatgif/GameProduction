@@ -35,7 +35,7 @@ void Map::Initialize()
 	Make();
 	RoomGeneration();
 	DigHole();
-	//Check();
+	Check();
 	WallHeight();
 
 }
@@ -410,6 +410,7 @@ void Map::WallHeight()
 		}
 	}
 }
+
 
 bool Map::IsWall(int x, int z)
 {
