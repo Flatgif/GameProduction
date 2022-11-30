@@ -6,12 +6,15 @@ class Map : public GameObject
 {
     int hModel_[3];
     int width_;
+    int wallHeight_;
     int roomGP_;
 
     struct
     {
         int data;
         int type;
+        int height;
+        
     }map_[100][100];
 
 public:
@@ -37,6 +40,7 @@ public:
     void DigHole();
     void RoomGeneration();
     void Check();
+    void WallHeight();
     bool IsWall(int x, int z);
     bool IsFloor(int x, int z);
 };

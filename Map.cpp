@@ -11,7 +11,7 @@
 
 //コンストラクタ
 Map::Map(GameObject* parent)
-	:GameObject(parent, "Map"), width_(31), roomGP_(97)
+	:GameObject(parent, "Map"), width_(31),wallHeight_(6), roomGP_(97)
 {
 }
 
@@ -36,6 +36,8 @@ void Map::Initialize()
 	RoomGeneration();
 	DigHole();
 	//Check();
+	WallHeight();
+
 }
 
 //更新
@@ -49,13 +51,19 @@ void Map::Draw()
 {
 	for (int i = 0; i < width_; i++)
 	{
-		transform_.position_.x = i;
 		for (int j = 0; j < width_; j++)
 		{
-			int type = map_[i][j].type;
-			transform_.position_.z = j;
-			Model::SetTransform(hModel_[type], transform_);
-			Model::Draw(hModel_[type]);
+			for (int k = 0; k < map_[i][j].height; k++)
+			{
+				int type = map_[i][j].type;
+				transform_.position_.x = i;
+				transform_.position_.z = j;
+				transform_.position_.y = k;
+				Model::SetTransform(hModel_[type], transform_);
+				Model::Draw(hModel_[type]);
+
+			}
+			
 		}
 	}
 }
@@ -379,6 +387,25 @@ void Map::RoomGeneration()
 						map_[i + k][j + l].type = 2;
 					}
 				}
+			}
+		}
+	}
+}
+
+//壁の高さ調整
+void Map::WallHeight()
+{
+	for (int i = 0; i < width_; i++)
+	{
+		for (int j = 0; j < width_; j++)
+		{
+			if (IsWall(i, j))
+			{
+				map_[i][j].height = wallHeight_;
+			}
+			else
+			{
+				map_[i][j].height = 1;
 			}
 		}
 	}
