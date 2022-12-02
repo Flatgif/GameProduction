@@ -8,6 +8,7 @@ enum SCENE_ID
 	SCENE_ID_TEST = 0,
 	SCENE_ID_PLAY,
 	SCENE_ID_BATTLE,
+	SCENE_ID_GOALSCENE,
 };
 
 //-----------------------------------------------------------
@@ -33,5 +34,6 @@ public:
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン
+
 
 };

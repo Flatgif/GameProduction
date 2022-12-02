@@ -31,13 +31,15 @@ void Map::Initialize()
 	//床のモデル
 	hModel_[2] = Model::Load("yuka.fbx");
 	assert(hModel_ >= 0);
+	hModel_[3] = Model::Load("enemy.fbx");
+	assert(hModel_ >= 0);
 
 	Make();
 	RoomGeneration();
 	DigHole();
 	Check();
 	WallHeight();
-
+	Stairs();
 }
 
 //更新
@@ -102,6 +104,7 @@ void Map::Make()
 			}
 		}
 	}
+	flag_ |= MakeOK;
 }
 
 
@@ -360,6 +363,7 @@ void Map::DigHole()
 		}
 
 	}
+
 }
 
 //部屋の作成
@@ -379,6 +383,7 @@ void Map::RoomGeneration()
 			int roomSize = rand() % roomS + 2;
 			if (genePprobability > roomGP_)
 			{
+				
 				for (int k = 0; k < roomSize; k++)
 				{
 					
@@ -410,7 +415,23 @@ void Map::WallHeight()
 		}
 	}
 }
+//階段の設置場所生成
+void Map::Stairs()
+{
+	int a = false;
+	do {
 
+
+		srand((unsigned int)time(NULL));
+		int x = rand() % width_ + 1, z = rand() % width_ + 1;
+		if (IsFloor(x, z))
+		{
+			map_[x][z].type = 3;
+			a = true;
+		}
+		
+	} while (a == false);
+}
 
 bool Map::IsWall(int x, int z)
 {
@@ -420,4 +441,9 @@ bool Map::IsWall(int x, int z)
 bool Map::IsFloor(int x, int z)
 {
 	return(map_[x][z].type == 2);
+}
+
+bool Map::IsStairs(int x,int z)
+{
+	return(map_[x][z].type == 3);
 }

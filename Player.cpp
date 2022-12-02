@@ -3,7 +3,7 @@
 #include "Engine/Model.h"
 #include "Engine/Input.h"
 #include "Engine/Global.h"
-
+#include "Engine/SceneManager.h"
 //コンストラクタ
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
@@ -110,6 +110,11 @@ void Player::Update()
 			{
 				vPos += vMoveX;
 			}
+			if (pMap->IsStairs(trans.position_.x, trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
+			}
 
 		}
 
@@ -122,6 +127,11 @@ void Player::Update()
 			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
 			{
 				vPos -= vMoveX;
+			}
+			if (pMap->IsStairs(trans.position_.x, trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
 			}
 
 		}
@@ -137,6 +147,11 @@ void Player::Update()
 			{
 				vPos += vMove;
 			}
+			if (pMap->IsStairs(trans.position_.x, trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
+			}
 
 		}
 
@@ -151,13 +166,19 @@ void Player::Update()
 			{
 				vPos -= vMove;
 			}
+			if (pMap->IsStairs(trans.position_.x, trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
+			}
+
 		}
 
 
 		move_ = false;
 	}
 	XMStoreFloat3(&transform_.position_, vPos);
-
+	
 
 
 	XMFLOAT3 nowPosition = transform_.position_;
@@ -188,6 +209,5 @@ void Player::Draw()
 //開放
 void Player::Release()
 {
-	SAFE_RELEASE(pMap);
 }
 
