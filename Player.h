@@ -14,6 +14,7 @@ class Player : public GameObject
     Map* pMap;
     XMFLOAT3 prevPosition_;
     XMFLOAT3 nowPosition_;
+    Transform trans;
     enum Flag
     {
         def = 0,
@@ -62,4 +63,5 @@ public:
     //ŠJ•ú
     void Release() override;
 
+    XMFLOAT3 movePlayer(XMFLOAT3 a, XMFLOAT3 b, float time);
 };
