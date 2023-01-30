@@ -7,7 +7,7 @@
 //コンストラクタ
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
-	, rota_(2.0f), rotaFlag_(false), dig_(0), dir_(nullptr), move_(false),trans(transform_)
+	, rota_(2.0f), rotaFlag_(false), dig_(0), dir_(nullptr), move_(false)
 {
 }
 
@@ -77,9 +77,10 @@ void Player::Update()
 		rotaFlag_ = false;
 	}
 
+	Transform trans = transform_;
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
 	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //x軸で()度回転;
-	XMVECTOR vCam = XMVectorSet(0, 0, -0.0001, 0);
+	XMVECTOR vCam = XMVectorSet(0, 0, -0.0001f, 0);
 	vCam = XMVector3TransformCoord(vCam, mRotateX);
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 
@@ -94,7 +95,7 @@ void Player::Update()
 
 	vMove = XMVector3TransformCoord(vMove, mRotate);
 	vMoveX = XMVector3TransformCoord(vMoveX, mRotate);
-	prevPosition_ = transform_.position_;
+
 	if (!rotaFlag_)
 	{
 
@@ -105,18 +106,16 @@ void Player::Update()
 			trans = transform_;
 			nPos += vMoveX;
 			XMStoreFloat3(&trans.position_, nPos);
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
 			{
-				float t = 0.0f;
-				for (int i = 0; i < 10; i++)
-				{
-					XMFLOAT3 a = movePlayer(prePosition, trans.position_, t);
-				XMVECTOR Pos = XMLoadFloat3(&a);
-				t += 0.1f;
-				vPos += Pos;
-				XMStoreFloat3(&transform_.position_, vPos);
-				}
+				vPos += vMoveX;
 			}
+			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
+			}
+
 		}
 
 		if (Input::IsKeyDown(DIK_A))
@@ -125,10 +124,16 @@ void Player::Update()
 			trans = transform_;
 			nPos -= vMoveX;
 			XMStoreFloat3(&trans.position_, nPos);
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
 			{
 				vPos -= vMoveX;
 			}
+			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
+			}
+
 		}
 
 		if (Input::IsKeyDown(DIK_W))
@@ -138,10 +143,16 @@ void Player::Update()
 			nPos += vMove;
 			XMStoreFloat3(&trans.position_, nPos);
 
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
 			{
 				vPos += vMove;
 			}
+			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
+			}
+
 		}
 
 		if (Input::IsKeyDown(DIK_S))
@@ -151,23 +162,23 @@ void Player::Update()
 			nPos -= vMove;
 			XMStoreFloat3(&trans.position_, nPos);
 
-			if (!pMap->IsWall(trans.position_.x, trans.position_.z))
+			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
 			{
 				vPos -= vMove;
 			}
+			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
+			{
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
+			}
 
-		}
-		if (pMap->IsStairs(trans.position_.x, trans.position_.z))
-		{
-			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-			pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
 		}
 
 
 		move_ = false;
 	}
 	XMStoreFloat3(&transform_.position_, vPos);
-	
+
 
 
 	XMFLOAT3 nowPosition = transform_.position_;
@@ -176,14 +187,14 @@ void Player::Update()
 
 	XMVECTOR myself = XMLoadFloat3(&camPos);
 	XMVECTOR target = XMLoadFloat3(&transform_.position_);
-	if (!Input::IsKey(DIK_Q))
+	if (Input::IsKey(DIK_Q))
 	{
-
-		Camera::SetPosition(camPos);
-		Camera::SetTarget(transform_.position_);
+		Camera::SetFov(120);
 
 	}
-	
+	Camera::SetPosition(camPos);
+	Camera::SetTarget(transform_.position_);
+
 }
 
 //描画
@@ -198,10 +209,5 @@ void Player::Draw()
 //開放
 void Player::Release()
 {
-}
-
-XMFLOAT3 Player::movePlayer(XMFLOAT3 start , XMFLOAT3 goal,float time)
-{
-	return XMFLOAT3(start.x + time *(goal.x - start.x),1.5f, start.z + time *(goal.z - start.z));
 }
 

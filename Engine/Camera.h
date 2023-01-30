@@ -18,11 +18,15 @@ namespace Camera
 	//焦点（見る位置）を設定
 	void SetTarget(XMFLOAT3 target);
 
+	void SetFov(int fov);
+
 	//位置を取得
 	XMFLOAT3 GetPosition();
 
 	//焦点を取得
 	XMFLOAT3 GetTarget();
+
+	int GetFov();
 
 	//ビュー行列を取得
 	XMMATRIX GetViewMatrix();
