@@ -53,4 +53,7 @@ public:
     bool IsWall(int x, int z);
     bool IsFloor(int x, int z);
     bool IsStairs(int x, int z);
+    //ƒ‚ƒfƒ‹”Ô†æ“¾
+    int GetModelHandle(int modelNum) { return hModel_[modelNum]; }
+
 };

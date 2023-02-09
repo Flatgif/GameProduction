@@ -24,6 +24,10 @@ void Player::Initialize()
 	assert(hModel_ >= 0);
 	pMap = (Map*)FindObject("Map");
 	assert(pMap != nullptr);
+	for (int i = 0; i < 4; i++)
+	{
+		hMapModel_[i] = pMap->GetModelHandle(i);
+	}
 
 	transform_.position_.y = 1.5f;
 	transform_.position_.x = 1.0f;
@@ -77,123 +81,53 @@ void Player::Update()
 		rotaFlag_ = false;
 	}
 
-	Transform trans = transform_;
-	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));   //Y軸で()度回転;
-	XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));   //x軸で()度回転;
-	XMVECTOR vCam = XMVectorSet(0, 0, -0.0001f, 0);
-	vCam = XMVector3TransformCoord(vCam, mRotateX);
-	vCam = XMVector3TransformCoord(vCam, mRotate);
+	vPos_ = XMLoadFloat3(&transform_.position_);
 
-	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);//positionもベクトルに変換
-	XMVECTOR nPos = XMLoadFloat3(&transform_.position_);
-
-	XMFLOAT3 move = { 0, 0, 1.0f };
-	XMFLOAT3 moveX = { 1.0f, 0, 0 };
-
-	XMVECTOR vMove = XMLoadFloat3(&move);
-	XMVECTOR vMoveX = XMLoadFloat3(&moveX);
-
-	vMove = XMVector3TransformCoord(vMove, mRotate);
-	vMoveX = XMVector3TransformCoord(vMoveX, mRotate);
-
-	if (!rotaFlag_)
+	//移動量
+	XMVECTOR moveX = { 1, 0, 0, 0 };
+	XMVECTOR moveZ = { 0, 0, 1, 0 };
+	moveX = XMVector3TransformCoord(moveX, mRotate_);
+	moveZ = XMVector3TransformCoord(moveZ, mRotate_);
+	//移動入力処理
+	if (Input::IsKeyDown(DIK_W))
 	{
-
-
-		if (Input::IsKeyDown(DIK_D))
-		{
-			move_ = true;
-			trans = transform_;
-			nPos += vMoveX;
-			XMStoreFloat3(&trans.position_, nPos);
-			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
-			{
-				vPos += vMoveX;
-			}
-			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
-			{
-				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
-			}
-
-		}
-
-		if (Input::IsKeyDown(DIK_A))
-		{
-			move_ = true;
-			trans = transform_;
-			nPos -= vMoveX;
-			XMStoreFloat3(&trans.position_, nPos);
-			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
-			{
-				vPos -= vMoveX;
-			}
-			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
-			{
-				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
-			}
-
-		}
-
-		if (Input::IsKeyDown(DIK_W))
-		{
-			move_ = true;
-			trans = transform_;
-			nPos += vMove;
-			XMStoreFloat3(&trans.position_, nPos);
-
-			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
-			{
-				vPos += vMove;
-			}
-			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
-			{
-				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
-			}
-
-		}
-
-		if (Input::IsKeyDown(DIK_S))
-		{
-			move_ = true;
-			trans = transform_;
-			nPos -= vMove;
-			XMStoreFloat3(&trans.position_, nPos);
-
-			if (!pMap->IsWall((int)trans.position_.x, (int)trans.position_.z))
-			{
-				vPos -= vMove;
-			}
-			if (pMap->IsStairs((int)trans.position_.x, (int)trans.position_.z))
-			{
-				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-				pSceneManager->ChangeScene(SCENE_ID_GOALSCENE);
-			}
-
-		}
-
-
-		move_ = false;
+		AddMove(moveZ);
 	}
-	XMStoreFloat3(&transform_.position_, vPos);
-
-
-
-	XMFLOAT3 nowPosition = transform_.position_;
-	XMFLOAT3 camPos;
-	XMStoreFloat3(&camPos, vPos + vCam);
-
-	XMVECTOR myself = XMLoadFloat3(&camPos);
-	XMVECTOR target = XMLoadFloat3(&transform_.position_);
-	if (Input::IsKey(DIK_Q))
+	if (Input::IsKeyDown(DIK_A))
 	{
-		Camera::SetFov(120);
+		AddMove(-moveX);
 
 	}
-	Camera::SetPosition(camPos);
-	Camera::SetTarget(transform_.position_);
+	if (Input::IsKeyDown(DIK_S))
+	{
+		AddMove(-moveZ);
+	}
+	if (Input::IsKeyDown(DIK_D))
+	{
+		AddMove(moveX);
+
+	}
+
+
+
+	switch (playerstate_)
+	{
+	case move:
+		PlayerSlideMove();
+		break;
+
+	default:
+		break;
+	}
+	XMStoreFloat3(&transform_.position_, vPos_);
+
+	//Y軸で()度回転;
+	mRotate_ = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	//x軸で()度回転;
+	mRotateX_ = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+
+	CallCam();
+
 
 }
 
@@ -209,5 +143,101 @@ void Player::Draw()
 //開放
 void Player::Release()
 {
+}
+
+void Player::PlayerMove()
+{
+	vMove_ = XMVector3Normalize(vMove_);
+	vPos_ += vMove_;
+	vMove_ = XMVectorSet(0, 0, 0, 0);
+	playerstate_ = def;
+
+}
+
+void Player::PlayerSlideMove()
+{
+	RayCastData data;
+
+	if (IsHit(hMapModel_[1], &data) || IsHit(hMapModel_[2], &data))
+	{
+		vMove_ = ScratchWall(data.normal, vMove_);
+		//vMove_ *= 0;
+	}
+	vPos_ += vMove_;
+	vMove_ = XMVectorSet(0, 0, 0, 0);
+	playerstate_ = def;
+
+
+}
+
+bool Player::IsHit(int h_model, RayCastData* data)
+{
+
+	XMVECTOR length = XMVector3Length(vMove_);
+	float leng = XMVectorGetX(length);
+	XMStoreFloat3(&data->start, vPos_);
+	XMStoreFloat3(&data->dir, vMove_);
+	Model::RayCast(h_model, &*data);
+	if (data->dist * leng <= 1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Player::CallCam()
+{
+	//Cameraの処理
+
+	XMFLOAT3 camPos;
+	//Cameraの位置
+	XMVECTOR vCam = XMVectorSet(0, transform_.position_.y, -0.0001f , 0);
+
+	vCam = XMVector3TransformCoord(vCam, mRotateX_);
+	vCam = XMVector3TransformCoord(vCam, mRotate_);
+
+	XMStoreFloat3(&camPos, vPos_ + vCam);
+
+	XMVECTOR myself = XMLoadFloat3(&camPos);
+	XMVECTOR target = XMLoadFloat3(&transform_.position_);
+
+	Camera::SetPosition(camPos);
+	Camera::SetTarget(transform_.position_);
+}
+
+void Player::ViewRotate()
+{
+	//マウスの移動量を正規化
+	XMFLOAT3 mouseMove = Input::GetMouseMove();
+
+	//視点の回転（マウスの移動量）
+	transform_.rotate_.x += mouseMove.y;
+	transform_.rotate_.y += mouseMove.x;
+	if (transform_.rotate_.x >= 89)
+	{
+		transform_.rotate_.x = 89;
+	}
+	if (transform_.rotate_.x <= -89)
+	{
+		transform_.rotate_.x = -89;
+	}
+
+#ifdef DEBUG
+	camDist_ += mouseMove.z / 10;
+	if (camDist_ > 0)camDist_ = 0;
+#endif // DEBUG
+}
+
+XMVECTOR Player::ScratchWall(XMVECTOR normal, XMVECTOR pos)
+{
+	XMVECTOR delY = XMVectorSet(1, 0, 1, 0);
+	normal = XMVector3Normalize(normal);
+	XMVECTOR result = pos - XMVector3Dot(pos, normal) * normal;
+	result *= delY;
+	return result;
+
 }
 
