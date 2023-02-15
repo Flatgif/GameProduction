@@ -24,11 +24,14 @@
       <UniqueIdentifier>{47a6a3f5-8cfd-436b-8d58-beccd108f3f3}</UniqueIdentifier>
       <Extensions>hlsl</Extensions>
     </Filter>
-    <Filter Include="BattleScene">
-      <UniqueIdentifier>{375db334-976a-45ca-85e1-29146f02fee7}</UniqueIdentifier>
+    <Filter Include="Game">
+      <UniqueIdentifier>{1d8b8aec-bc3d-4129-8ce1-fb1f5c97c96d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayScene">
+    <Filter Include="Game\PlayScene">
       <UniqueIdentifier>{6f764855-b48f-4111-9dcf-e97d4a94df12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BattleScene">
+      <UniqueIdentifier>{375db334-976a-45ca-85e1-29146f02fee7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,19 +97,19 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="BattleScene.cpp">
-      <Filter>BattleScene</Filter>
+      <Filter>Game\BattleScene</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="TentativeGoalScene.cpp">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,19 +175,19 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="BattleScene.h">
-      <Filter>BattleScene</Filter>
+      <Filter>Game\BattleScene</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="TentativeGoalScene.h">
-      <Filter>PlayScene</Filter>
+      <Filter>Game\PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

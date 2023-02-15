@@ -98,6 +98,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					SetWindowText(GetActiveWindow(), string);
 					FPS = 0;
 					lastFpsResetTime = nowTime;
+					Camera::setTime(FPS);
 				}
 			}
 

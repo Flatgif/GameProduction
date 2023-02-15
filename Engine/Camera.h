@@ -33,4 +33,7 @@ namespace Camera
 
 	//プロジェクション行列を取得
 	XMMATRIX GetProjectionMatrix();
+
+	void setTime(int time);
+	void setShakeFlag(bool shake);
 };

@@ -92,6 +92,7 @@ void Player::Update()
 	if (Input::IsKeyDown(DIK_W))
 	{
 		AddMove(moveZ);
+		Camera::setShakeFlag(true);
 	}
 	if (Input::IsKeyDown(DIK_A))
 	{
@@ -194,7 +195,7 @@ void Player::CallCam()
 
 	XMFLOAT3 camPos;
 	//Camera�̈ʒu
-	XMVECTOR vCam = XMVectorSet(0, transform_.position_.y, -0.0001f , 0);
+	XMVECTOR vCam = XMVectorSet(0,0, -0.0001f , 0);
 
 	vCam = XMVector3TransformCoord(vCam, mRotateX_);
 	vCam = XMVector3TransformCoord(vCam, mRotate_);
