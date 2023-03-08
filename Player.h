@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include "Map.h"
 #include "Engine/Model.h"
+#include "Engine/Text.h"
 
 //ŸŸŸ‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 class Player : public GameObject
@@ -9,6 +10,7 @@ class Player : public GameObject
 
     int hModel_;    //ƒ‚ƒfƒ‹”Ô†
     int hMapModel_[4];
+    Text* pText;
 
     int dig_;
     float rota_;

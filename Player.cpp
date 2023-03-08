@@ -4,6 +4,7 @@
 #include "Engine/Input.h"
 #include "Engine/Global.h"
 #include "Engine/SceneManager.h"
+#include "Engine/Text.h"
 //コンストラクタ
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
@@ -35,6 +36,8 @@ void Player::Initialize()
 	transform_.scale_ = XMFLOAT3(0.5f, 0.5f, 0.5f);
 	Camera::SetPosition(XMFLOAT3(transform_.position_));
 	Camera::SetTarget(XMFLOAT3(transform_.position_.x, transform_.position_.y, 11));
+	pText = new Text;
+	pText->Initialize();
 }
 
 //更新
@@ -129,7 +132,6 @@ void Player::Update()
 
 	CallCam();
 
-
 }
 
 //描画
@@ -137,7 +139,10 @@ void Player::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
-
+	pText->Draw(30, 30, "HP:");
+	pText->Draw(80, 30,player_.HP);
+	pText->Draw(170, 30,"/");
+	pText->Draw(190, 30,player_.MAXHP);
 
 }
 
